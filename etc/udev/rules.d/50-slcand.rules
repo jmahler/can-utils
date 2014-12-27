@@ -1,0 +1,16 @@
+#
+# udev/rules.d/50-slcand.rules
+#
+# When a LAWICEL LWX154GX serial CANUSB device is plugged in,
+# tell systemd to start the slcand (daemon) service.  When it
+# is un-plugged, stop the service.
+#
+# The $kernel argument to the slcand@.service is the
+# device name (e.g. ttyUSB0).
+#
+#   sudo systemctl status slcand@ttyUSB0
+#
+
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="ffa8", TAG+="systemd", ENV{SYSTEMD_WANTS}="slcand@$kernel"
+
+ACTION=="remove", ENV{DEVNAME}=="/dev/ttyUSB?", ENV{ID_MODEL_ID}=="ffa8", ENV{ID_VENDOR_ID}=="0403", RUN+="/bin/systemctl stop slcand@$kernel"

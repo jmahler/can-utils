@@ -1,0 +1,11 @@
+#
+# systemd/system/slcand@.service
+#
+
+[Unit]
+Description=Serial CAN daemon (can-utils)
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/slcand -o -c -f -s6 %I
+#  %I is the device name from udev (e.g. ttyUSB0)
